@@ -19,7 +19,7 @@ class MainWindow(Tk):
 
     def __create_widgets(self):
         handle_func = lambda m: mb.showinfo('Результат', f'Выпал сектор "{m}"')
-        self._wheel = RandomWheel((188, 140), 100, handle_func, (300, 700), self._values, self)
+        self._wheel = RandomWheel((188, 135), 130, handle_func, (300, 700), self._values, self)
         self._launch_button = Button(self, text='Вращать', command=lambda: self._wheel.launch(30, 0.1))
         
         self._lb_frame = Frame(self)

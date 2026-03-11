@@ -62,36 +62,19 @@ class RandomWheel(Canvas):
         index = round(self._current_rot) * len(self._values) // 360
         self._handle_func(self._values[index])
 
-    def define_text_markup(self)\
-        -> tuple[dict[str, tuple[int, int]], list[int], list[tuple[int, int]]]:
-        
+    def place_text_markup(self):
         values_len = len(self._values)
         deg_size = 360 / values_len
 
-        degrees = [i * deg_size for i in range(values_len + 1)]
-        border_coords = [self._circle.get_coords(deg) for deg in degrees]
-
-        avg_degrees = []
-        result = {}
-
-        for txt, (i, deg) in zip(self._values, enumerate(degrees)):
-            avg = (deg + degrees[i + 1]) / 2
+        for i, txt in enumerate(self._values):
+            deg = i * deg_size
+            
+            avg = (deg + (deg + deg_size)) / 2
             coords = self._circle.get_coords(avg, -(self._circle._radius / 3))
-
-            avg_degrees.append(avg)
-            result[txt] = coords
-
-        return result, degrees, border_coords
+            bd_coords = self._circle.get_coords(deg)
     
-    def place_text_markup(self):
-        coords, _, bd_coords = self.define_text_markup()
-
-        for key, value in coords.items():
-            self.create_text(*value, text=key, anchor='center')
-
-        # drawing borders
-        for bdc in bd_coords:
-            self.create_line(*self._circle._center, *bdc)
+            self.create_text(*coords, text=txt, anchor='center')
+            self.create_line(*self._circle._center, *bd_coords)
 
     def set_values(self, sequence):
         self._values = tuple(sequence)
